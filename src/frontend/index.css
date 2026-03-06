@@ -1,0 +1,362 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.625rem;
+    /* Deep navy/purple background theme */
+    --background: 0.12 0.04 280;
+    --foreground: 0.92 0.06 350;
+    --card: 0.16 0.05 280;
+    --card-foreground: 0.92 0.06 350;
+    --popover: 0.16 0.05 280;
+    --popover-foreground: 0.92 0.06 350;
+    --primary: 0.72 0.22 350;
+    --primary-foreground: 0.12 0.04 280;
+    --secondary: 0.22 0.06 290;
+    --secondary-foreground: 0.88 0.08 350;
+    --muted: 0.20 0.04 285;
+    --muted-foreground: 0.65 0.10 350;
+    --accent: 0.82 0.18 340;
+    --accent-foreground: 0.12 0.04 280;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.30 0.08 290;
+    --input: 0.28 0.06 285;
+    --ring: 0.72 0.22 350;
+    --chart-1: 0.72 0.22 350;
+    --chart-2: 0.65 0.18 320;
+    --chart-3: 0.58 0.15 300;
+    --chart-4: 0.80 0.20 340;
+    --chart-5: 0.55 0.20 10;
+    --sidebar: 0.14 0.045 280;
+    --sidebar-foreground: 0.92 0.06 350;
+    --sidebar-primary: 0.72 0.22 350;
+    --sidebar-primary-foreground: 0.12 0.04 280;
+    --sidebar-accent: 0.20 0.05 285;
+    --sidebar-accent-foreground: 0.88 0.08 350;
+    --sidebar-border: 0.30 0.08 290;
+    --sidebar-ring: 0.72 0.22 350;
+
+    /* Custom romantic palette */
+    --rose-glow: oklch(0.72 0.22 350);
+    --rose-bright: oklch(0.82 0.20 340);
+    --rose-deep: oklch(0.58 0.25 355);
+    --lavender-soft: oklch(0.75 0.15 290);
+    --pink-light: oklch(0.88 0.12 345);
+    --navy-bg: #0b0f2a;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background-color: var(--navy-bg);
+    color: oklch(var(--foreground));
+    font-family: 'Dancing Script', 'Palatino Linotype', cursive;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* =====================
+   BUTTERFLY ANIMATIONS
+   ===================== */
+
+@keyframes butterfly-float-1 {
+  0%   { transform: translate(-120px, 0vh) rotate(-5deg) scale(1); opacity: 0; }
+  5%   { opacity: 1; }
+  25%  { transform: translate(25vw, -8vh) rotate(5deg) scale(1.05); }
+  50%  { transform: translate(50vw, 5vh) rotate(-8deg) scale(0.95); }
+  75%  { transform: translate(75vw, -3vh) rotate(6deg) scale(1.02); }
+  95%  { opacity: 1; }
+  100% { transform: translate(110vw, 2vh) rotate(-4deg) scale(1); opacity: 0; }
+}
+
+@keyframes butterfly-float-2 {
+  0%   { transform: translate(110vw, 0) rotate(5deg) scale(1); opacity: 0; }
+  5%   { opacity: 1; }
+  30%  { transform: translate(75vw, -10vh) rotate(-6deg) scale(1.08); }
+  60%  { transform: translate(40vw, 6vh) rotate(4deg) scale(0.92); }
+  90%  { opacity: 1; }
+  100% { transform: translate(-120px, -4vh) rotate(-3deg) scale(1); opacity: 0; }
+}
+
+@keyframes butterfly-float-3 {
+  0%   { transform: translate(-80px, 0) rotate(-8deg) scale(0.9); opacity: 0; }
+  8%   { opacity: 0.85; }
+  20%  { transform: translate(20vw, 10vh) rotate(10deg) scale(1.1); }
+  45%  { transform: translate(45vw, -5vh) rotate(-5deg) scale(0.95); }
+  70%  { transform: translate(70vw, 8vh) rotate(7deg) scale(1.05); }
+  92%  { opacity: 0.85; }
+  100% { transform: translate(115vw, 2vh) rotate(-2deg) scale(0.9); opacity: 0; }
+}
+
+@keyframes butterfly-wing-flutter {
+  0%, 100% { transform: scaleX(1); }
+  50%       { transform: scaleX(0.6); }
+}
+
+@keyframes butterfly-float-4 {
+  0%   { transform: translate(0vw, -60px) rotate(-3deg); opacity: 0; }
+  10%  { opacity: 0.9; }
+  30%  { transform: translate(8vw, 25vh) rotate(4deg); }
+  60%  { transform: translate(15vw, 55vh) rotate(-6deg); }
+  90%  { opacity: 0.9; }
+  100% { transform: translate(20vw, 110vh) rotate(2deg); opacity: 0; }
+}
+
+@keyframes butterfly-float-5 {
+  0%   { transform: translate(80vw, -80px) rotate(5deg); opacity: 0; }
+  12%  { opacity: 0.85; }
+  40%  { transform: translate(72vw, 30vh) rotate(-3deg); }
+  70%  { transform: translate(65vw, 65vh) rotate(5deg); }
+  88%  { opacity: 0.85; }
+  100% { transform: translate(60vw, 115vh) rotate(-2deg); opacity: 0; }
+}
+
+/* =====================
+   PETAL ANIMATIONS
+   ===================== */
+
+@keyframes petal-fall-1 {
+  0%   { transform: translate(0, -80px) rotate(0deg); opacity: 0; }
+  8%   { opacity: 0.85; }
+  40%  { transform: translate(30px, 40vh) rotate(180deg); }
+  70%  { transform: translate(55px, 75vh) rotate(380deg); }
+  92%  { opacity: 0.7; }
+  100% { transform: translate(65px, 110vh) rotate(480deg); opacity: 0; }
+}
+
+@keyframes petal-fall-2 {
+  0%   { transform: translate(0, -80px) rotate(20deg); opacity: 0; }
+  10%  { opacity: 0.8; }
+  35%  { transform: translate(-35px, 35vh) rotate(-120deg); }
+  65%  { transform: translate(-65px, 70vh) rotate(-280deg); }
+  90%  { opacity: 0.7; }
+  100% { transform: translate(-80px, 110vh) rotate(-360deg); opacity: 0; }
+}
+
+@keyframes petal-fall-3 {
+  0%   { transform: translate(0, -80px) rotate(-10deg); opacity: 0; }
+  6%   { opacity: 0.85; }
+  30%  { transform: translate(20px, 30vh) rotate(100deg); }
+  60%  { transform: translate(35px, 65vh) rotate(260deg); }
+  88%  { opacity: 0.7; }
+  100% { transform: translate(45px, 110vh) rotate(430deg); opacity: 0; }
+}
+
+@keyframes petal-fall-4 {
+  0%   { transform: translate(0, -80px) rotate(30deg); opacity: 0; }
+  9%   { opacity: 0.75; }
+  38%  { transform: translate(-25px, 38vh) rotate(-140deg); }
+  68%  { transform: translate(-45px, 72vh) rotate(-320deg); }
+  91%  { opacity: 0.65; }
+  100% { transform: translate(-55px, 110vh) rotate(-400deg); opacity: 0; }
+}
+
+@keyframes petal-fall-5 {
+  0%   { transform: translate(0, -80px) rotate(-20deg); opacity: 0; }
+  7%   { opacity: 0.85; }
+  32%  { transform: translate(40px, 32vh) rotate(160deg); }
+  62%  { transform: translate(60px, 68vh) rotate(340deg); }
+  89%  { opacity: 0.7; }
+  100% { transform: translate(72px, 110vh) rotate(480deg); opacity: 0; }
+}
+
+/* =====================
+   HEART ANIMATIONS
+   ===================== */
+
+@keyframes heart-pulse-appear {
+  0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+  50%  { transform: scale(1.15) rotate(3deg); opacity: 1; }
+  70%  { transform: scale(0.95) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes heart-glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px oklch(0.72 0.22 350 / 0.7))
+            drop-shadow(0 0 30px oklch(0.72 0.22 350 / 0.4))
+            drop-shadow(0 0 60px oklch(0.65 0.20 340 / 0.25));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px oklch(0.82 0.22 350 / 0.9))
+            drop-shadow(0 0 50px oklch(0.72 0.20 340 / 0.6))
+            drop-shadow(0 0 90px oklch(0.65 0.20 340 / 0.4));
+    transform: scale(1.06);
+  }
+}
+
+/* =====================
+   ENDING MESSAGE
+   ===================== */
+
+@keyframes fade-in-up {
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer-text {
+  0%, 100% {
+    text-shadow:
+      0 0 8px oklch(0.82 0.20 340 / 0.6),
+      0 0 20px oklch(0.72 0.22 350 / 0.4),
+      0 0 40px oklch(0.65 0.20 355 / 0.2);
+  }
+  50% {
+    text-shadow:
+      0 0 12px oklch(0.88 0.18 340 / 0.9),
+      0 0 30px oklch(0.78 0.22 350 / 0.6),
+      0 0 60px oklch(0.70 0.22 355 / 0.4);
+  }
+}
+
+/* =====================
+   CURSOR BLINK
+   ===================== */
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: cursor-blink 0.8s ease-in-out infinite;
+  color: oklch(0.88 0.18 340);
+}
+
+/* =====================
+   LETTER TEXT GLOW
+   ===================== */
+
+.letter-text {
+  font-family: 'Dancing Script', cursive;
+  color: oklch(0.92 0.08 350);
+  text-shadow:
+    0 0 8px oklch(0.82 0.20 340 / 0.7),
+    0 0 20px oklch(0.72 0.22 350 / 0.5),
+    0 0 40px oklch(0.65 0.20 355 / 0.3);
+  animation: shimmer-text 3s ease-in-out infinite;
+  line-height: 1.7;
+}
+
+.letter-salutation {
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  font-weight: 700;
+  color: oklch(0.88 0.18 340);
+  text-shadow:
+    0 0 12px oklch(0.82 0.20 340 / 0.8),
+    0 0 30px oklch(0.72 0.22 350 / 0.5),
+    0 0 60px oklch(0.65 0.20 355 / 0.3);
+}
+
+.letter-body {
+  font-size: clamp(1.1rem, 3.5vw, 1.45rem);
+  font-weight: 400;
+}
+
+.letter-sign {
+  font-size: clamp(1.2rem, 4vw, 1.7rem);
+  font-weight: 700;
+  color: oklch(0.82 0.20 340);
+  font-style: italic;
+}
+
+/* =====================
+   CARD / CONTAINER
+   ===================== */
+
+.letter-card {
+  background: linear-gradient(
+    135deg,
+    oklch(0.18 0.06 280 / 0.85),
+    oklch(0.15 0.05 295 / 0.90)
+  );
+  backdrop-filter: blur(16px);
+  border: 1px solid oklch(0.72 0.22 350 / 0.20);
+  box-shadow:
+    0 0 40px oklch(0.72 0.22 350 / 0.08),
+    0 20px 60px oklch(0.10 0.04 280 / 0.6),
+    inset 0 1px 0 oklch(0.88 0.12 340 / 0.10);
+}
+
+/* =====================
+   BUTTERFLY ELEMENTS
+   ===================== */
+
+.butterfly {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  user-select: none;
+  will-change: transform;
+}
+
+.butterfly span {
+  display: inline-block;
+  animation: butterfly-wing-flutter 0.3s ease-in-out infinite alternate;
+}
+
+/* =====================
+   PETAL ELEMENTS
+   ===================== */
+
+.petal {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  width: clamp(8px, 2vw, 14px);
+  height: clamp(12px, 3vw, 20px);
+  border-radius: 50% 10% 50% 10%;
+  will-change: transform;
+}
+
+/* =====================
+   ENDING OVERLAY
+   ===================== */
+
+.ending-heart {
+  animation: heart-pulse-appear 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             heart-glow-pulse 2.5s ease-in-out 1.2s infinite;
+}
+
+.ending-message {
+  animation: fade-in-up 1s ease-out forwards;
+  font-family: 'Dancing Script', cursive;
+  color: oklch(0.88 0.18 340);
+  text-shadow:
+    0 0 10px oklch(0.82 0.20 340 / 0.7),
+    0 0 25px oklch(0.72 0.22 350 / 0.4);
+  font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* =====================
+   BACKGROUND STARS
+   ===================== */
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%       { opacity: 0.8; transform: scale(1.3); }
+}
+
+.star {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: oklch(0.92 0.06 350);
+  animation: star-twinkle var(--twinkle-duration, 3s) ease-in-out infinite;
+  animation-delay: var(--twinkle-delay, 0s);
+}
