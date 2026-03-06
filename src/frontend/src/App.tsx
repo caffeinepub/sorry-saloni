@@ -25,8 +25,8 @@ const LETTER_LINES = [
   { text: "— Sanu", type: "signature" },
 ];
 
-const CHAR_DELAY_MS = 65; // ms per character
-const LINE_PAUSE_MS = 850; // ms pause between lines
+const CHAR_DELAY_MS = 18; // ms per character
+const LINE_PAUSE_MS = 200; // ms pause between lines
 
 // ─── Butterfly Config ─────────────────────────────────────────────────────────
 
@@ -227,7 +227,94 @@ function HeartSVG({ size = 100 }: { size?: number }) {
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 
+// ─── Intro Typewriter ─────────────────────────────────────────────────────────
+
+const INTRO_TEXT = "Saloni...";
+const INTRO_CHAR_DELAY = 60; // ms per character for intro
+
+function IntroScreen({ onDone }: { onDone: () => void }) {
+  const [displayed, setDisplayed] = useState("");
+  const [fadeOut, setFadeOut] = useState(false);
+  const indexRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    function typeNext() {
+      if (indexRef.current < INTRO_TEXT.length) {
+        indexRef.current++;
+        setDisplayed(INTRO_TEXT.slice(0, indexRef.current));
+        timerRef.current = setTimeout(typeNext, INTRO_CHAR_DELAY);
+      } else {
+        // Pause, then fade out
+        timerRef.current = setTimeout(() => {
+          setFadeOut(true);
+          timerRef.current = setTimeout(onDone, 900);
+        }, 1200);
+      }
+    }
+    timerRef.current = setTimeout(typeNext, 400);
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [onDone]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{
+        background: "linear-gradient(135deg, #0b0f2a 0%, #1a0d2e 100%)",
+        transition: "opacity 0.9s ease",
+        opacity: fadeOut ? 0 : 1,
+        pointerEvents: fadeOut ? "none" : "auto",
+      }}
+    >
+      {/* Stars in intro too */}
+      {STARS.map((star) => (
+        <div
+          key={star.id}
+          className="star"
+          style={
+            {
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              "--twinkle-duration": `${star.duration}s`,
+              "--twinkle-delay": `${star.delay}s`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+
+      <div className="relative z-10 text-center px-6" aria-live="polite">
+        <p
+          style={{
+            fontFamily: "Dancing Script, cursive",
+            fontSize: "clamp(2.2rem, 7vw, 4rem)",
+            color: "#ffd9e6",
+            textShadow:
+              "0 0 30px rgba(255,111,168,0.6), 0 0 60px rgba(255,111,168,0.25)",
+            letterSpacing: "0.04em",
+            minHeight: "1.2em",
+          }}
+        >
+          {displayed}
+          <span
+            className="cursor-blink"
+            aria-hidden="true"
+            style={{ color: "#ff9dc8" }}
+          >
+            |
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
+  const [showIntro, setShowIntro] = useState(true);
+
   // Typewriter state
   const [completedLines, setCompletedLines] = useState<string[]>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
@@ -307,6 +394,8 @@ export default function App() {
       style={{ backgroundColor: "#0b0f2a" }}
       data-ocid="apology.page"
     >
+      {/* ── Intro typing screen ──────────────────────────────────────────── */}
+      {showIntro && <IntroScreen onDone={() => setShowIntro(false)} />}
       {/* ── Starfield ─────────────────────────────────────────────────────── */}
       {STARS.map((star) => (
         <div
@@ -360,118 +449,144 @@ export default function App() {
         className="relative z-10 flex flex-col items-center justify-center w-full px-4 py-10 sm:py-16"
         style={{ minHeight: "100dvh" }}
       >
-        <article
-          ref={letterRef}
-          className="letter-card rounded-2xl sm:rounded-3xl p-7 sm:p-10 md:p-14 w-full max-w-2xl mx-auto"
-          data-ocid="apology.card"
+        {/* Corner badge wrapper */}
+        <div
+          className="letter-wrapper"
+          style={{
+            width: "100%",
+            maxWidth: "672px",
+            margin: "0 auto",
+            position: "relative",
+          }}
         >
-          {/* Decorative top ornament */}
-          <div
-            className="flex items-center justify-center mb-7 gap-3"
-            aria-hidden="true"
+          {/* Corner badges */}
+          <div className="corner corner-tl" aria-hidden="true">
+            Dear Saloni ❤️
+          </div>
+          <div className="corner corner-tr" aria-hidden="true">
+            A message from my heart
+          </div>
+          <div className="corner corner-bl" aria-hidden="true">
+            You mean a lot to me
+          </div>
+          <div className="corner corner-br" aria-hidden="true">
+            Please forgive me
+          </div>
+
+          <article
+            ref={letterRef}
+            className="letter-card rounded-2xl sm:rounded-3xl p-7 sm:p-10 md:p-14 w-full max-w-2xl mx-auto"
+            data-ocid="apology.card"
           >
-            <span
-              style={{ color: "#ff6fa8", fontSize: "1.2rem", opacity: 0.7 }}
-            >
-              ❧
-            </span>
-            <span
-              style={{
-                color: "#e879a0",
-                fontSize: "0.9rem",
-                letterSpacing: "0.3em",
-                fontFamily: "Dancing Script, cursive",
-                opacity: 0.6,
-              }}
-            >
-              with love
-            </span>
-            <span
-              style={{ color: "#ff6fa8", fontSize: "1.2rem", opacity: 0.7 }}
-            >
-              ❧
-            </span>
-          </div>
-
-          {/* Completed lines */}
-          <div className="space-y-4 sm:space-y-5">
-            {completedLines.map((line, index) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: letter lines are ordered and never reordered
-              <p key={index} className={getLineClass(index)}>
-                {line}
-              </p>
-            ))}
-
-            {/* Currently typing line */}
-            {!typingComplete && currentLineIndex < LETTER_LINES.length && (
-              <p className={getCurrentLineClass()}>
-                {currentText}
-                <span className="cursor-blink" aria-hidden="true">
-                  |
-                </span>
-              </p>
-            )}
-          </div>
-
-          {/* Ending sequence inline */}
-          {typingComplete && (
+            {/* Decorative top ornament */}
             <div
-              className="mt-10 sm:mt-14 flex flex-col items-center gap-5 sm:gap-7"
-              data-ocid="apology.section"
+              className="flex items-center justify-center mb-7 gap-3"
+              aria-hidden="true"
             >
-              {/* Decorative divider */}
-              <div
-                className="w-24 sm:w-32 h-px"
+              <span
+                style={{ color: "#ff6fa8", fontSize: "1.2rem", opacity: 0.7 }}
+              >
+                ❧
+              </span>
+              <span
                 style={{
-                  background:
-                    "linear-gradient(90deg, transparent, oklch(0.72 0.22 350 / 0.4), transparent)",
+                  color: "#e879a0",
+                  fontSize: "0.9rem",
+                  letterSpacing: "0.3em",
+                  fontFamily: "Dancing Script, cursive",
+                  opacity: 0.6,
                 }}
-                aria-hidden="true"
-              />
+              >
+                with love
+              </span>
+              <span
+                style={{ color: "#ff6fa8", fontSize: "1.2rem", opacity: 0.7 }}
+              >
+                ❧
+              </span>
+            </div>
 
-              {/* Pulsing heart */}
-              {showHeart && (
-                <div
-                  className="ending-heart"
-                  style={{ display: "flex", justifyContent: "center" }}
-                  aria-label="Heart"
-                  data-ocid="apology.card"
-                >
-                  <HeartSVG size={clampHeartSize()} />
-                </div>
-              )}
+            {/* Completed lines */}
+            <div className="space-y-4 sm:space-y-5">
+              {completedLines.map((line, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: letter lines are ordered and never reordered
+                <p key={index} className={getLineClass(index)}>
+                  {line}
+                </p>
+              ))}
 
-              {/* Ending message */}
-              {showEndingMessage && (
-                <p className="ending-message" data-ocid="apology.section">
-                  Thank you for visiting this page, Saloni.
+              {/* Currently typing line */}
+              {!typingComplete && currentLineIndex < LETTER_LINES.length && (
+                <p className={getCurrentLineClass()}>
+                  {currentText}
+                  <span className="cursor-blink" aria-hidden="true">
+                    |
+                  </span>
                 </p>
               )}
             </div>
-          )}
 
-          {/* Decorative bottom ornament */}
-          <div
-            className="flex items-center justify-center mt-8 gap-2"
-            aria-hidden="true"
-          >
-            <span
-              style={{ color: "#ff6fa8", fontSize: "0.85rem", opacity: 0.4 }}
+            {/* Ending sequence inline */}
+            {typingComplete && (
+              <div
+                className="mt-10 sm:mt-14 flex flex-col items-center gap-5 sm:gap-7"
+                data-ocid="apology.section"
+              >
+                {/* Decorative divider */}
+                <div
+                  className="w-24 sm:w-32 h-px"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, oklch(0.72 0.22 350 / 0.4), transparent)",
+                  }}
+                  aria-hidden="true"
+                />
+
+                {/* Pulsing heart */}
+                {showHeart && (
+                  <div
+                    className="ending-heart"
+                    style={{ display: "flex", justifyContent: "center" }}
+                    aria-label="Heart"
+                    data-ocid="apology.card"
+                  >
+                    <HeartSVG size={clampHeartSize()} />
+                  </div>
+                )}
+
+                {/* Ending message */}
+                {showEndingMessage && (
+                  <p className="ending-message" data-ocid="apology.section">
+                    Thank you for visiting this page, Saloni.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Decorative bottom ornament */}
+            <div
+              className="flex items-center justify-center mt-8 gap-2"
+              aria-hidden="true"
             >
-              ✿
-            </span>
-            <span
-              style={{ color: "#e879a0", fontSize: "0.75rem", opacity: 0.3 }}
-            >
-              ✿
-            </span>
-            <span
-              style={{ color: "#ff6fa8", fontSize: "0.85rem", opacity: 0.4 }}
-            >
-              ✿
-            </span>
-          </div>
-        </article>
+              <span
+                style={{ color: "#ff6fa8", fontSize: "0.85rem", opacity: 0.4 }}
+              >
+                ✿
+              </span>
+              <span
+                style={{ color: "#e879a0", fontSize: "0.75rem", opacity: 0.3 }}
+              >
+                ✿
+              </span>
+              <span
+                style={{ color: "#ff6fa8", fontSize: "0.85rem", opacity: 0.4 }}
+              >
+                ✿
+              </span>
+            </div>
+          </article>
+        </div>
+        {/* end letter-wrapper */}
 
         {/* ── Footer ─────────────────────────────────────────────────────── */}
         <footer className="mt-8 pb-6 text-center" aria-label="Footer">

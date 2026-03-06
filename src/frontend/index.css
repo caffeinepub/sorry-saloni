@@ -343,6 +343,58 @@
 }
 
 /* =====================
+   CORNER BADGES
+   ===================== */
+
+.letter-wrapper {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.corner {
+  position: absolute;
+  padding: 6px 11px;
+  background: linear-gradient(90deg, oklch(0.55 0.22 350 / 0.13), oklch(0.65 0.18 340 / 0.09));
+  color: oklch(0.92 0.10 345);
+  font-weight: 600;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Dancing Script', cursive;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  pointer-events: none;
+  transform-origin: center;
+  box-shadow: 0 6px 18px oklch(0.10 0.04 280 / 0.55);
+  animation: glowPulse 3.5s ease-in-out infinite;
+  z-index: 20;
+  white-space: nowrap;
+}
+
+.corner-tl { top: -14px; left: 0; }
+.corner-tr { top: -14px; right: 0; }
+.corner-bl { bottom: -14px; left: 0; }
+.corner-br { bottom: -14px; right: 0; }
+
+@keyframes glowPulse {
+  0%   { box-shadow: 0 6px 18px oklch(0.10 0.04 280 / 0.45); transform: translateY(0) scale(1); }
+  50%  { box-shadow: 0 12px 30px oklch(0.72 0.22 350 / 0.18); transform: translateY(-2px) scale(1.02); }
+  100% { box-shadow: 0 6px 18px oklch(0.10 0.04 280 / 0.45); transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 700px) {
+  .corner { font-size: 11px; padding: 4px 8px; border-radius: 6px; }
+  .corner-tl { top: 4px; left: 4px; }
+  .corner-tr { top: 4px; right: 4px; }
+  .corner-bl { bottom: 4px; left: 4px; }
+  .corner-br { bottom: 4px; right: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corner { animation: none; transform: none; }
+}
+
+/* =====================
    BACKGROUND STARS
    ===================== */
 
